@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="card-body">
+        <div class="col-xs-12 text-center">
+            <h4>Process {{ process_name }}</h4>
+        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Importance</th>
+                <th scope="col">Description</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for risk in risks %}
+                <tr>
+                    <td>{{ risk.name }}</td>
+                    <td>{{ risk.importance }}</td>
+                    <td>{{ risk.description }}</td>
+                    <td>
+                        <a type="button" class="btn btn-warning" href="/risk-update/{{ risk.risk_id }}">Update</a>
+                        <a type="button" class="btn btn-danger" href="/risk-delete/{{ risk.risk_id }}">Delete</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a type="button" class="btn btn-success" href="/risk-create/{{ process_id }}">Create</a>
+    </div>
+    <div class="card-body">
+        <form action="/risk-upload/{{ process_id }}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <input type="file" class="form-control" name="risk_list">
+            <br>
+            <input type="submit" value="Upload" class="btn btn-success">
+        </form>
+    </div>
+    <div class="col-xs-12 text-center">
+        <h2>Project Management Triangle</h2>
+    </div>
+    <div class="col-xs-12 text-center">
+        <img src="data:image/png;base64, {{ chart_base64 }}" alt="Pie Chart"/>
+    </div>
+{% endblock %}
